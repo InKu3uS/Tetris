@@ -30,6 +30,7 @@ body {
     align-items: center;
     gap: 8px;
     background-color: #3C3E52;
+    padding: 8px;
     border-radius: 15px;
 }
 
@@ -39,11 +40,64 @@ body {
     border-radius: 8px;
 }
 
-.canvas-container span {
+.canvas-container span,
+.menu span {
     color: white;
     font-size: 1.5rem;
 }
 
-.canvas-container .score-container {
+.canvas-container .score-container, #score {
     font-size: 25px;
+}
+
+.menu {
+    position:absolute;
+    left: 50%;
+    top: 50%;
+    text-align: center;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+    background-color: black;
+    border: 5px solid white;
+    border-radius: 15px;
+    display: none;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 30px;
+}
+
+.menu button {
+    padding: 5px 10px;
+    margin: 0 30px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: 2px solid white;
+    border-radius: 5px;
+    background-color: #3C3E52;
+    color: white;
+}
+
+.menu button:hover {
+    background-color: #1A1B28;
+}
+
+.game-over{
+    display: none;
+    flex-direction: column;
+}
+
+.show-controls {
+    display: none;
+    flex-direction: column;
+    text-align: start;
+}
+
+.game-over p {
+    color: white;
+    font-size: 1rem;
+}
+
+.show-controls p {
+    color: white;
+    font-size: 0.75rem;
 }

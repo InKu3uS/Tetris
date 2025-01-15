@@ -86,6 +86,5 @@ export class Grid {
         this.matrix.forEach(row => {
             text += row.join(' ') + '\n';
         });
-        console.log(text);
     }
 }
