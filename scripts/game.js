@@ -22,6 +22,21 @@ export class Game{
         // Inicializa la puntuación y el estado de fin de juego
         this.score = 0;
         this.gameOver = false;
+
+        this.landedSound = new Audio('/assets/sounds/piece-landed.wav');
+        this.landedSound.load();
+        this.landedSound.volume = 0.25;
+
+        this.rotationSound = new Audio('/assets/sounds/rotate.wav');
+        this.rotationSound.load();
+        this.rotationSound.volume = 0.3;
+
+        this.holdSound = new Audio('/assets/sounds/hold.wav');
+        this.holdSound.load();
+        this.holdSound.volume = 0.5;
+
+        this.gameOverSound = new Audio('/assets/sounds/game-over.wav');
+        this.gameOverSound.load();
     }
 
     // Método para actualizar el estado del juego
@@ -100,6 +115,7 @@ export class Game{
     // Método para rotar el tetromino en sentido horario
     rotationTetrominoCW(){
         this.currentTetromino.rotation++;
+        this.rotationSound.play();
         if(this.currentTetromino.rotation > this.currentTetromino.shapes.length - 1){
             this.currentTetromino.rotation = 0;
         }
@@ -128,13 +144,18 @@ export class Game{
                 [tetrominoPositions[i].column] = this.currentTetromino.id;
         }
 
+        //Reproduce el sonido al aterrizar el tetromino
+        this.landedSound.play();
+
         //Aumenta la puntuación si se completa una fila
         this.score += this.boardTetris.clearFullRows()*7;
+        
 
         //Verifica si el juego ha terminado
         if(this.boardTetris.gameOver()){
             setTimeout(() => {
                 this.gameOver = true;
+                this.gameOverSound.play();
             }, 500);
             return true;
         } else {
@@ -206,10 +227,15 @@ export class Game{
 
             // Obtiene el siguiente tetromino de la bolsa
             this.currentTetromino = this.tetrominoBag.nextTetromino();
+
+            
         } else {
             // Si ya hay un tetromino en reserva, intercambia el tetromino actual con el de reserva
             [this.currentTetromino, this.hold.tetromino] = [this.hold.tetromino, this.currentTetromino];
         }
+        //Reproduce el sonido de pieza guardada en la reserva
+        this.holdSound.play();
+
         // Actualiza la matriz del tablero de reserva
         this.hold.updateMatrix();
 

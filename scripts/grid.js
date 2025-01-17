@@ -73,7 +73,7 @@ export class Grid {
             }
         }
 
-        this.printMatrix();
+        //this.printMatrix();
     }
 
     //Similar al método draw, pero siempre solo dibuja cuando el valor de la celda es diferente de 0

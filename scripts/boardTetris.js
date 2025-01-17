@@ -4,6 +4,22 @@ import { Grid } from "/scripts/grid.js";
 export class BoardTetris extends Grid {
     constructor(canvas, rows, cols, cellSize, space) {
         super(canvas, rows, cols, cellSize, space);
+
+        this.simpleSound = new Audio('/assets/sounds/simple-line.wav');
+        this.simpleSound.load();
+        this.simpleSound.volume = 0.5;
+
+        this.doubleSound = new Audio('/assets/sounds/double-line.wav');
+        this.doubleSound.load();
+        this.doubleSound.volume = 0.5;
+
+        this.tripleSound = new Audio('/assets/sounds/great-line.wav');
+        this.tripleSound.load();
+        this.tripleSound.volume = 0.5;
+
+        this.tetrisSound = new Audio('/assets/sounds/tetris-line.wav');
+        this.tetrisSound.load();
+        this.tetrisSound.volume = 0.5;
     }
 
     // Verifica si una posición está dentro del tablero
@@ -44,6 +60,15 @@ export class BoardTetris extends Grid {
             if(this.isRowFull(row)){
                 this.clearRow(row);
                 count++;
+                if(count === 1){
+                    this.simpleSound.play();
+                } else if(count === 2){
+                    this.doubleSound.play();
+                } else if(count === 3){
+                    this.tripleSound.play();
+                } else if(count ===4){
+                    this.tetrisSound.play();
+                }
             } else if(count > 0){
                 this.moveRowDown(row, count);
             }
