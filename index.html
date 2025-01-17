@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris</title>
+    <link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div class="points" id="points">
+        <span>YOUR HIGHEST SCORE IS <span id="high-score">0</span></span>
+    </div>
+    <div class="game">
+        <div class="canvas-container">
+            <span>HOLD</span>
+            <div class="canvas">
+                <canvas id="canvas-hold"></canvas>
+            </div>
+        </div>
+        <div class="canvas-container">
+            <span class="score-container">SCORE: <span id="score">0</span></span>
+            <div class="canvas">
+                <canvas id="canvas-tetris"></canvas>
+            </div>
+        </div>
+        <div class="canvas-container">
+            <span>NEXT</span>
+            <div class="canvas">
+                <canvas id="canvas-next"></canvas>
+            </div>
+        </div>
+        <div class="menu" id="menu">
+            <span>TETRIS</span>
+            <div class="game-over" id="game-over">
+                <p>Game Over</p>
+                <p>Your final score is: <span id="final-score">0</span></p>
+            </div>
+            <button id="btn-start">START</button>
+            <button id="btn-controls">CONTROLS</button>
+            <div class="show-controls" id="show-controls">
+                <p>Move left: Left Cursor</p>
+                <p>Move right: Right Cursor</p>
+                <p>Move down: Down Cursor</p>
+                <p>Change position: Up Cursor</p>
+                <p>Place down: Space</p>
+                <p>Hold tetromino: C</p>
+            </div>
+        </div>
+    </div>
+    <script src="/scripts/main.js" type="module"></script>
+    
+</body>
+</html>
