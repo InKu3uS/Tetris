@@ -5,21 +5,27 @@ export class BoardTetris extends Grid {
     constructor(canvas, rows, cols, cellSize, space) {
         super(canvas, rows, cols, cellSize, space);
 
-        this.simpleSound = new Audio('/assets/sounds/simple-line.wav');
-        this.simpleSound.load();
-        this.simpleSound.volume = 0.5;
+        //Lista con las propiedades de audio
+        this.sounds = [
+            {name: 'simple', path: '/assets/sounds/simple-line.wav', volume: 0.5},
+            {name: 'double', path: '/assets/sounds/double-line.wav', volume: 0.5},
+            {name: 'triple', path: '/assets/sounds/triple-line.wav', volume: 0.5},
+            {name: 'tetris', path: '/assets/sounds/tetris-line.wav', volume: 0.5},
+        ];
 
-        this.doubleSound = new Audio('/assets/sounds/double-line.wav');
-        this.doubleSound.load();
-        this.doubleSound.volume = 0.5;
+        this.loadAudio();
+    }
 
-        this.tripleSound = new Audio('/assets/sounds/great-line.wav');
-        this.tripleSound.load();
-        this.tripleSound.volume = 0.5;
-
-        this.tetrisSound = new Audio('/assets/sounds/tetris-line.wav');
-        this.tetrisSound.load();
-        this.tetrisSound.volume = 0.5;
+    //Se recorre la lista de propiedades de audio, se crea un archivo de audio por cada valor en la lista,
+    // se cargan y se establece el volumen para cada uno
+    loadAudio(){
+        this.audioEffects = {};
+        this.sounds.forEach(({name, path, volume}) =>{
+            const audio = new Audio(path);
+            audio.load();
+            audio.volume = volume;
+            this.audioEffects[name] = audio;
+        });
     }
 
     // Verifica si una posición está dentro del tablero
@@ -61,13 +67,13 @@ export class BoardTetris extends Grid {
                 this.clearRow(row);
                 count++;
                 if(count === 1){
-                    this.simpleSound.play();
+                    this.audioEffects['simple'].play();
                 } else if(count === 2){
-                    this.doubleSound.play();
+                    this.audioEffects['double'].play();
                 } else if(count === 3){
-                    this.tripleSound.play();
+                    this.audioEffects['triple'].play();
                 } else if(count ===4){
-                    this.tetrisSound.play();
+                    this.audioEffects['tetris'].play();
                 }
             } else if(count > 0){
                 this.moveRowDown(row, count);

@@ -24,6 +24,16 @@ body {
     align-items: flex-start;
 }
 
+.points {
+    display: none;
+    position: absolute;
+    top: 18%;  /* Puedes ajustar esta distancia */
+    left: 50%;
+    transform: translateX(-50%);
+    /* Asegura que el texto de puntos esté encima */
+    text-align: center;
+}
+
 .canvas-container {
     display: flex;
     flex-direction: column;
@@ -41,7 +51,7 @@ body {
 }
 
 .canvas-container span,
-.menu span {
+.menu span, .points span {
     color: white;
     font-size: 1.5rem;
 }

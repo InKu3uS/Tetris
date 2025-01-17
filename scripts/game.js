@@ -7,6 +7,8 @@ export class Game{
         this.boardTetris = new BoardTetris(canvas, rows, cols, cellSize, space);
         this.tetrominoBag = new TetrominoBag(canvas, cellSize);
         this.currentTetromino = this.tetrominoBag.nextTetromino();
+
+        //Se añaden los eventos de teclado
         this.keyboardEvent();
 
         // Inicializa las teclas y los tiempos
@@ -23,20 +25,28 @@ export class Game{
         this.score = 0;
         this.gameOver = false;
 
-        this.landedSound = new Audio('/assets/sounds/piece-landed.wav');
-        this.landedSound.load();
-        this.landedSound.volume = 0.25;
+        //Lista con las propiedades de audio
+        this.sounds = [
+            {name: 'landed', path: '/assets/sounds/piece-landed.wav', volume: 0.25},
+            {name: 'rotate', path: '/assets/sounds/rotate.wav', volume: 0.25},
+            {name: 'hold', path: '/assets/sounds/hold.wav', volume: 0.25},
+            {name: 'gameOver', path: '/assets/sounds/game-over.wav', volume: 0.25}
+        ];
 
-        this.rotationSound = new Audio('/assets/sounds/rotate.wav');
-        this.rotationSound.load();
-        this.rotationSound.volume = 0.3;
+        //Carga los archivos de audio
+        this.loadAudio();
+    }
 
-        this.holdSound = new Audio('/assets/sounds/hold.wav');
-        this.holdSound.load();
-        this.holdSound.volume = 0.5;
-
-        this.gameOverSound = new Audio('/assets/sounds/game-over.wav');
-        this.gameOverSound.load();
+    //Se recorre la lista de propiedades de audio, se crea un archivo de audio por cada valor en la lista,
+    // se cargan y se establece el volumen para cada uno
+    loadAudio(){
+        this.audioEffects = {};
+        this.sounds.forEach(({name, path, volume})=> {
+            const audio = new Audio(path);
+            audio.load();
+            audio.volume = volume;
+            this.audioEffects[name] = audio;
+        })
     }
 
     // Método para actualizar el estado del juego
@@ -115,7 +125,7 @@ export class Game{
     // Método para rotar el tetromino en sentido horario
     rotationTetrominoCW(){
         this.currentTetromino.rotation++;
-        this.rotationSound.play();
+        this.audioEffects['rotate'].play();
         if(this.currentTetromino.rotation > this.currentTetromino.shapes.length - 1){
             this.currentTetromino.rotation = 0;
         }
@@ -145,17 +155,16 @@ export class Game{
         }
 
         //Reproduce el sonido al aterrizar el tetromino
-        this.landedSound.play();
+        this.audioEffects['landed'].play();
 
         //Aumenta la puntuación si se completa una fila
         this.score += this.boardTetris.clearFullRows()*7;
         
-
         //Verifica si el juego ha terminado
         if(this.boardTetris.gameOver()){
             setTimeout(() => {
                 this.gameOver = true;
-                this.gameOverSound.play();
+                this.audioEffects['gameOver'].play();
             }, 500);
             return true;
         } else {
@@ -197,6 +206,7 @@ export class Game{
 
     // Método para dibujar la sombra del tetromino actual en su posición de caída
     drawTetrominoGhost(){
+
         // Calcula la distancia mínima de caída del tetromino actual
         const dropDistance = this.tetrominoDropDistance();
 
@@ -234,7 +244,7 @@ export class Game{
             [this.currentTetromino, this.hold.tetromino] = [this.hold.tetromino, this.currentTetromino];
         }
         //Reproduce el sonido de pieza guardada en la reserva
-        this.holdSound.play();
+        this.audioEffects['hold'].play();
 
         // Actualiza la matriz del tablero de reserva
         this.hold.updateMatrix();
