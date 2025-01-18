@@ -2,16 +2,18 @@ import { Grid } from "/scripts/grid.js";
 
 // Clase que extiende de Grid para manejar el tablero de Tetris
 export class BoardTetris extends Grid {
-    constructor(canvas, rows, cols, cellSize, space) {
+    constructor(canvas, rows, cols, cellSize, space, soundActive) {
         super(canvas, rows, cols, cellSize, space);
 
         //Lista con las propiedades de audio
         this.sounds = [
-            {name: 'simple', path: '/assets/sounds/simple-line.wav', volume: 0.5},
-            {name: 'double', path: '/assets/sounds/double-line.wav', volume: 0.5},
-            {name: 'triple', path: '/assets/sounds/triple-line.wav', volume: 0.5},
-            {name: 'tetris', path: '/assets/sounds/tetris-line.wav', volume: 0.5},
+            {name: 'simple', path: '/assets/sounds/simple-line.wav', volume: 0.2},
+            {name: 'double', path: '/assets/sounds/double-line.wav', volume: 0.2},
+            {name: 'triple', path: '/assets/sounds/triple-line.wav', volume: 0.2},
+            {name: 'tetris', path: '/assets/sounds/tetris-line.wav', volume: 0.3},
         ];
+
+        this.soundActive = soundActive;
 
         this.loadAudio();
     }
@@ -66,13 +68,14 @@ export class BoardTetris extends Grid {
             if(this.isRowFull(row)){
                 this.clearRow(row);
                 count++;
-                if(count === 1){
+                //Si el sonido está activo, reproduce el correspondiente al numero de lineas completadas
+                if(count === 1 && this.soundActive){
                     this.audioEffects['simple'].play();
-                } else if(count === 2){
+                } else if(count === 2 && this.soundActive){
                     this.audioEffects['double'].play();
-                } else if(count === 3){
+                } else if(count === 3 && this.soundActive){
                     this.audioEffects['triple'].play();
-                } else if(count ===4){
+                } else if(count ===4 && this.soundActive){
                     this.audioEffects['tetris'].play();
                 }
             } else if(count > 0){

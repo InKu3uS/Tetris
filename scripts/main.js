@@ -1,8 +1,8 @@
 import { Game } from "/scripts/game.js";
 
+//TODO: Header y estilos
 //TODO: Aumento de niveles según puntuación
-//TODO: Activar, desactivar audio
-//TODO: Activar, desactivar musica
+//TODO: Panel donde se muestre el nivel actual y el numero de lineas completadas
 
 // Obtiene los elementos del DOM
 const canvasTetris = document.getElementById('canvas-tetris');
@@ -17,6 +17,12 @@ const gameOver = document.getElementById('game-over');
 const btnStart = document.getElementById('btn-start');
 const btnControls = document.getElementById('btn-controls');
 const controls = document.getElementById('show-controls');
+const musicCheckbox = document.getElementById('music');
+const soundCheckbox = document.getElementById('sound');
+
+let musicActive = musicCheckbox.checked;
+let soundActive = soundCheckbox.checked;
+
 
 // Configuración del juego
 const rows = 20;
@@ -28,11 +34,21 @@ let firstMatch = true;
 let scoreStorage = 0;
 
 // Crea una nueva instancia del juego
-const game = new Game(canvasTetris, rows, cols, cellSize, space, canvasNext, canvasHold);
+const game = new Game(canvasTetris, rows, cols, cellSize, space, canvasNext, canvasHold, soundActive, musicActive);
+
+const gameMusic = new Audio('/assets/sounds/music.mp3');
+gameMusic.volume = 0.3;
+gameMusic.loop = true;
+gameMusic.load();
 
 // Función de actualización del juego
 function update(){
     if(game.gameOver){
+
+        //Detiene la musica cuando se acaba la partida
+        gameMusic.pause();
+        gameMusic.currentTime = 0;
+
         // Muestra el menú y la puntuación final si el juego ha terminado
         finalScore.innerHTML = game.score;
         menu.style.display = 'flex';
@@ -52,6 +68,9 @@ function update(){
         }
     }
     else {
+        if(musicActive && gameMusic.paused){
+            gameMusic.play();
+        }
         // Actualiza el juego y la puntuación
         game.update();
         score.innerHTML = game.score;
@@ -89,6 +108,18 @@ btnControls.addEventListener('click', () => {
         controls.style.display = 'none';
     }
 });
+
+//Evento para activar o desactivar la musica en el juego
+musicCheckbox.addEventListener('change', (event) =>{
+    musicActive = event.target.checked;
+    game.musicActive = musicActive;
+});
+
+//Evento para activar o desactivar los efectos de sonido en el juego
+soundCheckbox.addEventListener('change', (event)=>{
+    soundActive = event.target.checked;
+    game.soundActive = soundActive;
+})
 
 
 game.gameOver = true;
