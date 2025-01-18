@@ -2,9 +2,14 @@ import { TetrominoBag } from "/scripts/tetromino.js";
 import { BoardTetris, BoardNext, BoardHold } from "/scripts/boardTetris.js";
 
 export class Game{
-    constructor(canvas, rows, cols, cellSize, space, canvasNext, canvasHold){
+    constructor(canvas, rows, cols, cellSize, space, canvasNext, canvasHold, soundActive, musicActive){
+
+        //Variables que controlan si el sonido y la musica estan activadas
+        this.soundActive = soundActive;
+        this.musicActive = musicActive;
+
         // Inicializa el tablero de Tetris, la bolsa de tetrominos y el primer tetromino
-        this.boardTetris = new BoardTetris(canvas, rows, cols, cellSize, space);
+        this.boardTetris = new BoardTetris(canvas, rows, cols, cellSize, space, this.soundActive);
         this.tetrominoBag = new TetrominoBag(canvas, cellSize);
         this.currentTetromino = this.tetrominoBag.nextTetromino();
 
@@ -25,12 +30,15 @@ export class Game{
         this.score = 0;
         this.gameOver = false;
 
+        
+
         //Lista con las propiedades de audio
         this.sounds = [
-            {name: 'landed', path: '/assets/sounds/piece-landed.wav', volume: 0.25},
-            {name: 'rotate', path: '/assets/sounds/rotate.wav', volume: 0.25},
-            {name: 'hold', path: '/assets/sounds/hold.wav', volume: 0.25},
-            {name: 'gameOver', path: '/assets/sounds/game-over.wav', volume: 0.25}
+            {name: 'landed', path: '/assets/sounds/piece-landed.wav', volume: 0.25, loop: false},
+            {name: 'rotate', path: '/assets/sounds/rotate.wav', volume: 0.25, loop: false},
+            {name: 'hold', path: '/assets/sounds/hold.wav', volume: 0.25, loop: false},
+            {name: 'gameOver', path: '/assets/sounds/game-over.wav', volume: 0.25, loop: false},
+            {name: 'gameOverMusic', path: '/assets/sounds/game-over-music.mp3', volume: 0.5, loop: false}
         ];
 
         //Carga los archivos de audio
@@ -125,7 +133,10 @@ export class Game{
     // Método para rotar el tetromino en sentido horario
     rotationTetrominoCW(){
         this.currentTetromino.rotation++;
-        this.audioEffects['rotate'].play();
+        //Si el sonido esta activado, lo reproduce
+        if(this.soundActive){
+            this.audioEffects['rotate'].play();
+        }
         if(this.currentTetromino.rotation > this.currentTetromino.shapes.length - 1){
             this.currentTetromino.rotation = 0;
         }
@@ -155,7 +166,9 @@ export class Game{
         }
 
         //Reproduce el sonido al aterrizar el tetromino
-        this.audioEffects['landed'].play();
+        if(this.soundActive){
+            this.audioEffects['landed'].play();
+        }
 
         //Aumenta la puntuación si se completa una fila
         this.score += this.boardTetris.clearFullRows()*7;
@@ -164,7 +177,14 @@ export class Game{
         if(this.boardTetris.gameOver()){
             setTimeout(() => {
                 this.gameOver = true;
-                this.audioEffects['gameOver'].play();
+                if(this.soundActive){
+                    this.audioEffects['gameOver'].play();
+                    if(this.musicActive){
+                        setTimeout(() => {
+                            this.audioEffects['gameOverMusic'].play();
+                        }, 600);
+                    }
+                }
             }, 500);
             return true;
         } else {
@@ -243,8 +263,10 @@ export class Game{
             // Si ya hay un tetromino en reserva, intercambia el tetromino actual con el de reserva
             [this.currentTetromino, this.hold.tetromino] = [this.hold.tetromino, this.currentTetromino];
         }
-        //Reproduce el sonido de pieza guardada en la reserva
-        this.audioEffects['hold'].play();
+        //Si el sonido está activo, reproduce el sonido de pieza guardada en la reserva
+        if(this.soundActive){
+            this.audioEffects['hold'].play();
+        }
 
         // Actualiza la matriz del tablero de reserva
         this.hold.updateMatrix();
