@@ -1,9 +1,9 @@
 import { Game } from "/scripts/game.js";
+import { BoardTetris } from '/scripts/boardTetris.js';
 
 //TODO: Header y estilos.
 //TODO: Aumento de niveles según puntuación.
 //TODO: Controles para movil.
-//TODO: Pausar musica cuando no es la pestaña activa
 //TODO: README.md
 
 // Obtiene los elementos del DOM
@@ -115,12 +115,24 @@ btnControls.addEventListener('click', () => {
 musicCheckbox.addEventListener('change', (event) =>{
     musicActive = event.target.checked;
     game.musicActive = musicActive;
+    console.log("MUSICA: "+game.musicActive);
 });
 
 //Evento para activar o desactivar los efectos de sonido en el juego
 soundCheckbox.addEventListener('change', (event)=>{
     soundActive = event.target.checked;
-    game.soundActive = soundActive;
+    game.setSoundActive(soundActive);
+});
+
+// Evento para pausar la música cuando la pestaña no es activa y reproducirla cuando es activa
+document.addEventListener('visibilitychange', () =>{
+    if (document.hidden){
+        gameMusic.pause();
+    } else {
+        if (musicActive) {
+            gameMusic.play();
+        }
+    }
 })
 
 

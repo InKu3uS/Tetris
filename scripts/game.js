@@ -60,6 +60,12 @@ export class Game{
         })
     }
 
+    // Método para actualizar soundActive en BoardTetris
+    setSoundActive(value) {
+        this.soundActive = value;
+        this.boardTetris.soundActive = value;
+    }
+
     // Método para actualizar el estado del juego
     update(){
         let currentTime = Date.now();

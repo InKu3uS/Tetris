@@ -153,3 +153,8 @@ body {
 .select-sounds label:hover {
     color: yellow; /* Cambia este color al que prefieras */
 }
+
+.select-music input[type=checkbox],
+.select-sounds input[type=checkbox] {
+    cursor: pointer;
+}
