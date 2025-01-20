@@ -60,7 +60,7 @@ export class Game{
         })
     }
 
-    // Método para actualizar soundActive en BoardTetris
+    // Método para actualizar soundActive en BoardTetris y en Game
     setSoundActive(value) {
         this.soundActive = value;
         this.boardTetris.soundActive = value;
