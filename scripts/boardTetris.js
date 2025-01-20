@@ -4,6 +4,9 @@ import { Grid } from "/scripts/grid.js";
 export class BoardTetris extends Grid {
     constructor(canvas, rows, cols, cellSize, space, soundActive) {
         super(canvas, rows, cols, cellSize, space);
+        
+        //Variable que registra el numero de lineas hechas durante la partida
+        this.lines = 0;
 
         //Lista con las propiedades de audio
         this.sounds = [
@@ -12,6 +15,7 @@ export class BoardTetris extends Grid {
             {name: 'triple', path: '/assets/sounds/triple-line.wav', volume: 0.2},
             {name: 'tetris', path: '/assets/sounds/tetris-line.wav', volume: 0.3},
         ];
+
 
         this.soundActive = soundActive;
 
@@ -82,7 +86,8 @@ export class BoardTetris extends Grid {
                 this.moveRowDown(row, count);
             }
         }
-
+        //Actualiza la variable lines con el numero de lineas que se han completado
+        this.lines += count;
         return count;
     }
 

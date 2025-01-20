@@ -2,7 +2,6 @@ import { Game } from "/scripts/game.js";
 
 //TODO: Header y estilos.
 //TODO: Aumento de niveles según puntuación.
-//TODO: Panel donde se muestre el nivel actual y el numero de lineas completadas.
 //TODO: Controles para movil.
 //TODO: Pausar musica cuando no es la pestaña activa
 //TODO: README.md

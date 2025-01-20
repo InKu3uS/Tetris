@@ -26,6 +26,9 @@ export class Game{
         this.hold = new BoardHold(canvasHold, 2, 4, cellSize, space);
         this.canHold = true;
 
+        //Elemento del DOM donde se mostrará el numero de lineas realizadas en tiempo real
+        this.lines = document.getElementById('lines');
+
         // Inicializa la puntuación y el estado de fin de juego
         this.score = 0;
         this.gameOver = false;
@@ -194,9 +197,16 @@ export class Game{
             this.next.listTetrominos = this.tetrominoBag.getThreeNextTetrominos();
             //Actualiza la matriz de tetrominos siguientes
             this.next.updateMatrix();
+            //Se actualiza el numero de lineas realizadas
+            this.updateLines();
             //Permite mantener un tetromino de nuevo
             this.canHold = true;
         }
+    }
+
+    //Metodo que actualiza en pantalla el numero de lineas realizadas
+    updateLines(){
+        this.lines.innerHTML = this.boardTetris.lines;
     }
 
     // Método para calcular la distancia de caída de un tetromino desde una posición específica 
