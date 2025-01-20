@@ -27,10 +27,7 @@ body {
 .points {
     display: none;
     position: absolute;
-    top: 18%;  /* Puedes ajustar esta distancia */
-    left: 50%;
-    transform: translateX(-50%);
-    /* Asegura que el texto de puntos esté encima */
+    top: 18%;  
     text-align: center;
 }
 
@@ -44,14 +41,29 @@ body {
     border-radius: 15px;
 }
 
-.canvas {
+.canvas, .stats {
     background-color: black;
     padding: 12px 15px;
     border-radius: 8px;
 }
 
+.stats-container {
+    position: absolute;
+    margin-top: 10%;
+    transform: translateY(80%);
+    background-color: #3C3E52;
+    padding: 8px;
+    border-radius: 15px;
+}
+
+.stats p{
+    color: white;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+}
+
 .canvas-container span,
-.menu span, .points span {
+.menu span, .points span, .stats span {
     color: white;
     font-size: 1.5rem;
 }
@@ -140,4 +152,9 @@ body {
 .select-sounds input[type=checkbox]:hover + label,
 .select-sounds label:hover {
     color: yellow; /* Cambia este color al que prefieras */
+}
+
+.select-music input[type=checkbox],
+.select-sounds input[type=checkbox] {
+    cursor: pointer;
 }
