@@ -5,24 +5,47 @@ import { BoardTetris } from '/scripts/boardTetris.js';
 //TODO: Aumento de niveles según puntuación.
 //TODO: Controles para movil.
 //TODO: README.md
+//TODO: Mover manualmente la pieza hacia abajo da puntos, moverla de golpe tambien.
 
-// Obtiene los elementos del DOM
+// Tablero de juego
 const canvasTetris = document.getElementById('canvas-tetris');
+// Canvas para las siguientes pieza
 const canvasNext = document.getElementById('canvas-next');
+// Canvas para la pieza en espera
 const canvasHold = document.getElementById('canvas-hold');
+
+//Puntuación de la partida
 const score = document.getElementById('score');
+//Puntuación máxima alcanzada
 const highScore = document.getElementById('high-score');
+//Puntuación final de la partida
 const finalScore = document.getElementById('final-score');
-const menu = document.getElementById('menu');
+//Nivel final alcanzado
+const finalLevel = document.getElementById('final-level');
+
+//Div que muestra la puntuación final
 const points = document.getElementById('points');
+//Div que muestra el nivel alcanzado
+const levels = document.getElementById('levels');
+//Div que muestra el mensaje de game over
 const gameOver = document.getElementById('game-over');
+
+//Menú de inicio
+const menu = document.getElementById('menu');
+//Botón de inicio
 const btnStart = document.getElementById('btn-start');
+//Botón de controles
 const btnControls = document.getElementById('btn-controls');
+//Div que muestra los controles
 const controls = document.getElementById('show-controls');
+//Checkbox para activar o desactivar la música
 const musicCheckbox = document.getElementById('music');
+//Checkbox para activar o desactivar los efectos de sonido
 const soundCheckbox = document.getElementById('sound');
 
+//Variable que almacena si la música está activa o no
 let musicActive = musicCheckbox.checked;
+//Variable que almacena si el sonido está activo o no
 let soundActive = soundCheckbox.checked;
 
 
@@ -32,16 +55,22 @@ const cols = 10;
 const cellSize = 26;
 const space = 2;
 
+//Variable que almacena si es la primera partida
 let firstMatch = true;
+//Variable que almacena la puntuación máxima
 let scoreStorage = 0;
 
 // Crea una nueva instancia del juego
 const game = new Game(canvasTetris, rows, cols, cellSize, space, canvasNext, canvasHold, soundActive, musicActive);
 
-const gameMusic = new Audio('/assets/sounds/music.mp3');
+//Elemento que reproduce la música de fondo
+const gameMusic = document.createElement('audio');
+gameMusic.src = '/assets/sounds/music.mp3';
 gameMusic.volume = 0.3;
 gameMusic.loop = true;
-gameMusic.load();
+gameMusic.style.display = 'none';
+gameMusic.playbackRate = 1;
+document.body.appendChild(gameMusic);
 
 // Función de actualización del juego
 function update(){
@@ -51,8 +80,9 @@ function update(){
         gameMusic.pause();
         gameMusic.currentTime = 0;
 
-        // Muestra el menú y la puntuación final si el juego ha terminado
+        // Muestra el menú y la puntuación final y el nivel alcanzado si el juego ha terminado
         finalScore.innerHTML = game.score;
+        finalLevel.innerHTML = game.level;
         menu.style.display = 'flex';
         
         //Si la puntuación de la partida es mayor que la puntuación máxima, la guarda como puntuación máxima
@@ -65,12 +95,15 @@ function update(){
         highScore.innerHTML = scoreStorage;
         points.style.display = 'flex';
 
+        //Si el estado del juego es game over y no es la primera partida
+        // muestra el mensaje de game over
         if(!firstMatch){         
             gameOver.style.display = 'flex';
         }
     }
     else {
-        if(musicActive && gameMusic.paused){
+        //Reproduce la música si está activa y el juego no está pausado
+        if(musicActive && gameMusic.paused && document.visibilityState === 'visible'){
             gameMusic.play();
         }
         // Actualiza el juego y la puntuación
@@ -96,6 +129,7 @@ btnStart.addEventListener('click', () => {
         // Oculta el menú, la puntuación máxima y reinicia el juego
         menu.style.display = 'none';
         points.style.display = 'none';
+        levels.innerHTML = game.level;
         firstMatch = false;
         game.reset();
     }, 200);
@@ -115,7 +149,6 @@ btnControls.addEventListener('click', () => {
 musicCheckbox.addEventListener('change', (event) =>{
     musicActive = event.target.checked;
     game.musicActive = musicActive;
-    console.log("MUSICA: "+game.musicActive);
 });
 
 //Evento para activar o desactivar los efectos de sonido en el juego
@@ -125,15 +158,15 @@ soundCheckbox.addEventListener('change', (event)=>{
 });
 
 // Evento para pausar la música cuando la pestaña no es activa y reproducirla cuando es activa
-document.addEventListener('visibilitychange', () =>{
-    if (document.hidden){
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
         gameMusic.pause();
     } else {
         if (musicActive) {
             gameMusic.play();
         }
     }
-})
+});
 
 
 game.gameOver = true;

@@ -28,9 +28,12 @@ export class Game{
 
         //Elemento del DOM donde se mostrará el numero de lineas realizadas en tiempo real
         this.lines = document.getElementById('lines');
+        //Elemento del DOM donde el nivel actual
+        this.levels = document.getElementById('levels');
 
-        // Inicializa la puntuación y el estado de fin de juego
+        // Inicializa la puntuación, el nivel y el estado de fin de juego
         this.score = 0;
+        this.level = 1;
         this.gameOver = false;
 
         
@@ -72,8 +75,9 @@ export class Game{
         let deltaTime = currentTime - this.lastTime;
         let deltaTime2 = currentTime - this.lastTime2;
 
-        // Mueve el tetromino automáticamente cada segundo
-        if(deltaTime > 1000){
+        // Mueve el tetromino automáticamente cada segundo.
+        // A medida que aumenten los niveles alcanzados, la velocidad de caída de los tetrominos aumentará
+        if(deltaTime > 1000-(this.level*50)){
             this.autoMoveTetromino();
             this.lastTime = currentTime;
         }
@@ -181,6 +185,7 @@ export class Game{
 
         //Aumenta la puntuación si se completa una fila
         this.score += this.boardTetris.clearFullRows()*7;
+        this.increaseLevel();
         
         //Verifica si el juego ha terminado
         if(this.boardTetris.gameOver()){
@@ -214,6 +219,23 @@ export class Game{
     updateLines(){
         this.lines.innerHTML = this.boardTetris.lines;
     }
+
+    //Metodo que actualiza en pantalla el nivel actual
+    updateLevels(){
+        this.levels.innerHTML = this.level;
+    }
+
+    //Metodo que aumenta el nivel del juego cada vez que se superan 50 puntos
+    increaseLevel(){
+        const newLevel = Math.floor(this.score / 50) + 1;
+        if(newLevel > this.level){
+            this.level = newLevel;
+            this.updateLevels();
+            console.log("NIVEL: "+this.level);
+            //Musica subir de nivel
+        }
+    }
+
 
     // Método para calcular la distancia de caída de un tetromino desde una posición específica 
     dropDistance(position){
@@ -290,7 +312,7 @@ export class Game{
         // Establece que no se puede mantener otro tetromino hasta que se coloque el actual
         this.canHold = false; 
     }
-
+    
     //Reinicia el estado del juego, preparandolo para una nueva partida
     reset(){
         // Establece el estado de fin de juego a falso
@@ -299,6 +321,8 @@ export class Game{
         this.boardTetris.restartMatrix();
         //Establece la puntuación a cero
         this.score = 0;
+        //Establece el nivel a 1
+        this.level = 1;
         //Limpia el tetromino en reserva
         this.hold.tetromino = null;
         //Reinicia la bolsa de tetrominos
