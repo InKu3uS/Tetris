@@ -44,7 +44,8 @@ export class Game{
             {name: 'rotate', path: '/assets/sounds/rotate.wav', volume: 0.25, loop: false},
             {name: 'hold', path: '/assets/sounds/hold.wav', volume: 0.25, loop: false},
             {name: 'gameOver', path: '/assets/sounds/game-over.wav', volume: 0.25, loop: false},
-            {name: 'gameOverMusic', path: '/assets/sounds/game-over-music.mp3', volume: 0.5, loop: false}
+            {name: 'gameOverMusic', path: '/assets/sounds/game-over-music.mp3', volume: 0.5, loop: false},
+            {name: 'levelUp', path: '/assets/sounds/level-up.wav', volume: 0.25, loop: false},
         ];
 
         //Carga los archivos de audio
@@ -230,9 +231,10 @@ export class Game{
         const newLevel = Math.floor(this.score / 50) + 1;
         if(newLevel > this.level){
             this.level = newLevel;
+            setTimeout(() => {
+                this.audioEffects['levelUp'].play();
+            }, 200);
             this.updateLevels();
-            console.log("NIVEL: "+this.level);
-            //Musica subir de nivel
         }
     }
 
