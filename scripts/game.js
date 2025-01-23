@@ -30,6 +30,8 @@ export class Game{
         this.lines = document.getElementById('lines');
         //Elemento del DOM donde el nivel actual
         this.levels = document.getElementById('levels');
+        //Elemento del DOM donde se mostrará un mensaje al subir de nivel
+        this.levelUp = document.getElementById('level');
 
         // Inicializa la puntuación, el nivel y el estado de fin de juego
         this.score = 0;
@@ -224,6 +226,7 @@ export class Game{
     //Metodo que actualiza en pantalla el nivel actual
     updateLevels(){
         this.levels.innerHTML = this.level;
+        this.levelUpMessage();
     }
 
     //Metodo que aumenta el nivel del juego cada vez que se superan 50 puntos
@@ -231,11 +234,22 @@ export class Game{
         const newLevel = Math.floor(this.score / 50) + 1;
         if(newLevel > this.level){
             this.level = newLevel;
-            setTimeout(() => {
-                this.audioEffects['levelUp'].play();
-            }, 200);
+            //Si el sonido está activo, reproduce el sonido de subir de nivel
+            if(this.soundActive){
+                setTimeout(() => {
+                    this.audioEffects['levelUp'].play();
+                }, 200);
+            }
             this.updateLevels();
         }
+    }
+
+    //Hace visible el mensaje indicando que se ha subido de nivel
+    levelUpMessage(){
+        this.levelUp.style.display = 'flex';
+        setTimeout(() => {
+            this.levelUp.style.display = 'none';
+        }, 800);
     }
 
 
