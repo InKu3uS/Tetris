@@ -1,10 +1,8 @@
 import { Game } from "/scripts/game.js";
-import { BoardTetris } from '/scripts/boardTetris.js';
 
 //TODO: Header y estilos.
 //TODO: Aumento de niveles según puntuación.
 //TODO: Controles para movil.
-//TODO: README.md
 //TODO: Mover manualmente la pieza hacia abajo da puntos, moverla de golpe tambien.
 
 // Tablero de juego
