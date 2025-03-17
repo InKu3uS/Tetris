@@ -61,16 +61,17 @@ Este proyecto es una implementación del clásico juego de Tetris. El objetivo d
 ## Estructura del proyecto
 
     assets/
-    images/
-    sounds/
-    index.css
-    index.html
+        images/
+        sounds/
+    styles/
+        index.css
     scripts/
         boardTetris.js
         game.js
         grid.js
         main.js
         tetromino.js
+    index.html
 
 ## Tecnologías usadas
 
